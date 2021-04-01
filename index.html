@@ -5,18 +5,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Applications of deep learning to automatic multitrack mixing are largely unexplored. 
-    This is partly due to the limited available data, coupled with the fact that such data is relatively unstructured and variable. 
-    To address these challenges, we propose a domain-inspired model with a strong inductive bias for the mixing task. 
-    We achieve this with the application of pre-trained sub-networks and weight sharing, as well as with a sum/difference stereo loss function. 
-    The proposed model can be trained with a limited number of examples, is permutation invariant with respect to the input ordering, 
-    and places no limit on the number of input sources. 
-    Furthermore, it produces human-readable mixing parameters, allowing users to manually adjust or refine the generated mix. 
-    Results from a perceptual evaluation involving audio engineers indicate that our approach generates mixes that outperform baseline approaches. 
-    To the best of our knowledge, this work demonstrates the first approach in learning multitrack mixing conventions from real-world data at the waveform level, 
-    without knowledge of the underlying mixing parameters.">
-    <meta name="author" content="Christian Steinmetz">
-    <title>Automatic multitrack mixing with a differentiable mixing console of neural audio effects</title>
+    <meta name="description" content="Despite the popularity of guitar effects, there is very little existing research on classification and parameter estimation of specific plugins or effect units from guitar recordings. 
+    In this paper, convolutional neural networks were used for classification and parameter estimation for 13 overdrive, distortion and fuzz guitar effects. 
+    A novel dataset of processed electric guitar samples was assembled, with four sub-datasets consisting of monophonic or polyphonic samples and discrete or continuous settings values, for a total of about 250 hours of processed samples. 
+    Results were compared for networks trained and tested on the same or on a different sub-dataset. 
+    We found that discrete datasets could lead to equally high performance as continuous ones, whilst being easier to design, analyse and modify. 
+    Classification accuracy was above 80\%, with confusion matrices reflecting similarities in the effects timbre and circuits design. 
+    With parameter values between 0.0 and 1.0, the mean absolute error is in most cases below 0.05, while the root mean square error is below 0.1 in all cases but one.">
+    <meta name="author" content="Marco Comunità">
+    <title>Title</title>
     
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -29,18 +26,15 @@
     <div class="jumbotron jumbotron-fluid text-center">
         <div class="row">
           <div class="col-lg-12">
-            <h1 class="mt-5">Automatic multitrack mixing with a differentiable <br> mixing console of neural audio effects</h1>
+            <h1 class="mt-5">Test</h1>
             <hr>
             <p class="lead">
-                <a href="https://www.christiansteinmetz.com/">Christian Steinmetz</a>, 
-                <a href="http://www.jordipons.me/">Jordi Pons</a>, 
-                <a href="https://scholar.google.es/citations?user=7cVOyh0AAAAJ&hl=ca">Santiago Pascual</a>, 
-                <a href="https://joanserra.weebly.com/">Joan Serrà</a>
+                <a href="https://mcomunita.github.io/">Test</a>, 
             </p>
             <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="https://arxiv.org/abs/2010.10291" type="button" class="btn btn-secondary">Paper</a>
-                <a href="https://github.com/csteinmetz1/pymixconsole" type="button" class="btn btn-secondary">Code (pymixconsole)</a>
-                <a href="#" type="button" class="btn btn-secondary"></a>
+                <a href="#" type="button" class="btn btn-secondary">Button1</a>
+                <a href="#" type="button" class="btn btn-secondary">Button2</a>
+                <a href="#" type="button" class="btn btn-secondary">Button3</a>
               </div>
           </div>
         </div>
@@ -48,50 +42,40 @@
     
     <div class="container">
         <div class="section abstract">
-            <h2>Abstract</h1>
+            <h2>Header2</h2>
             <hr>
             <p>
-                Applications of deep learning to automatic multitrack mixing are largely unexplored. 
-                This is partly due to the limited available data, coupled with the fact that such data is relatively unstructured and variable. 
-                To address these challenges, we propose a domain-inspired model with a strong inductive bias for the mixing task. 
-                We achieve this with the application of pre-trained sub-networks and weight sharing, as well as with a sum/difference stereo loss function. 
-                The proposed model can be trained with a limited number of examples, is permutation invariant with respect to the input ordering, 
-                and places no limit on the number of input sources. 
-                Furthermore, it produces human-readable mixing parameters, allowing users to manually adjust or refine the generated mix. 
-                Results from a perceptual evaluation involving audio engineers indicate that our approach generates mixes that outperform baseline approaches. 
-                To the best of our knowledge, this work demonstrates the first approach in learning multitrack mixing conventions from real-world data at the waveform level, 
-                without knowledge of the underlying mixing parameters.
+                Test
             </p>
         </div>
 
         <div class="section">
-            <h2 class="">Transformation Network</h1>
+            <h2 class="">Header2</h2>
             <hr>
             <div class="row mb-4">
                 <div class="col-md-6 text-center">
-                    <img class="img-fluid" src="img/transform-net-detail.svg">
+                    <img class="img-fluid" src="#">
                 </div>
                 <div class="col-md-6">
-                    <p>The transformation network is tasked with emulating a series connection of digital audio effects. 
+                    <!-- <p>The transformation network is tasked with emulating a series connection of digital audio effects. 
                         In this case we train the transformation network to model an EQ, dynamic range compressor, and reverb. 
                         To train this network we randomly configure the parameters of the signal chain, and process clean examples
                         from the dataset to generate input and target pairs. 
                         In the samples below, we shown the input signal and the target signal from the original signal chain with a number of random configurations,
                         where EQ, compression, and reverb are all applied.  
                         The remaining examples are the output of three trained models, TCN-10, TCN-20, and TCN-30. 
-                        All examples here come from the test set of the <a href="https://zenodo.org/record/3824876">SignalTrain LA2A Dataset</a>.
+                        All examples here come from the test set of the <a href="https://zenodo.org/record/3824876">SignalTrain LA2A Dataset</a>. -->
+                        Text
                     </p>
                 </div>
             </div>
           
             <table class="table table-sm text-center" style="vertical-align: middle;">
                 <tr>
-                    <th class="passage">Passage</th>
-                    <th>Input</th>
-                    <th>Target</th>
-                    <th>TCN-10</th>
-                    <th>TCN-20</th>
-                    <th>TCN-30</th>
+                    <th class="passage">Text</th>
+                    <th>Text</th>
+                    <th>Text</th>
+                    <th>Text</th>
                 </tr>
                 <tr>
                     <td class="passage">A</td>
@@ -126,7 +110,7 @@
                         </audio>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td class="passage">B</td>
                     <td>
                         <audio controls class="player">
@@ -290,13 +274,13 @@
                         Your browser does not support the audio element.
                         </audio>
                     </td>
-                </tr>
+                </tr> -->
             </table>
-            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
+            <p class="text-center">Text</p>
 
         </div>
 
-        <div class="section">
+        <!-- <div class="section">
             <h2 class="mt-5">Differentiable mixing console</h1>
             <hr>
             <div class="row">
@@ -679,7 +663,7 @@
             </table>
             <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
 
-        </div>
+        </div> -->
 
         <!--- 
         <div class="mt-2 section">
@@ -762,26 +746,26 @@
         </div>
         -->
 
-        <div class="section">
+        <!-- <div class="section">
             <h2>Citation</h2>
             <hr>
             <div style="background-color: #e9ecef;">
                 <pre>
                 <code>
-    @article{steinmetz2020mixing,
+            @article{steinmetz2020mixing,
             title={Automatic multitrack mixing with a differentiable mixing console of neural audio effects},
             author={Steinmetz, Christian J. and Pons, Jordi and Pascual, Santiago and Serrà, Joan},
             journal={arXiv:2010.10291},
             year={2020}}</code>
                 </pre>
             </div>
-        </div>
+        </div> -->
 
-        <hr>
+        <!-- <hr>
         <footer>
             <p>*Submitted to ICASSP 2021</p>
             <p>Send feedback and questions to <a href="http://christiansteinmetz.com">Christian Steinmetz</a>.</p>
-        </footer>
+        </footer> -->
 
     </div>
 
