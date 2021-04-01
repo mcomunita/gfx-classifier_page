@@ -1,0 +1,800 @@
+
+
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Applications of deep learning to automatic multitrack mixing are largely unexplored. 
+    This is partly due to the limited available data, coupled with the fact that such data is relatively unstructured and variable. 
+    To address these challenges, we propose a domain-inspired model with a strong inductive bias for the mixing task. 
+    We achieve this with the application of pre-trained sub-networks and weight sharing, as well as with a sum/difference stereo loss function. 
+    The proposed model can be trained with a limited number of examples, is permutation invariant with respect to the input ordering, 
+    and places no limit on the number of input sources. 
+    Furthermore, it produces human-readable mixing parameters, allowing users to manually adjust or refine the generated mix. 
+    Results from a perceptual evaluation involving audio engineers indicate that our approach generates mixes that outperform baseline approaches. 
+    To the best of our knowledge, this work demonstrates the first approach in learning multitrack mixing conventions from real-world data at the waveform level, 
+    without knowledge of the underlying mixing parameters.">
+    <meta name="author" content="Christian Steinmetz">
+    <title>Automatic multitrack mixing with a differentiable mixing console of neural audio effects</title>
+    
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta name="theme-color" content="#563d7c">
+    <link rel="stylesheet" href="styles.css">
+
+  </head>
+  <body>
+    <!-- Page Content -->
+    <div class="jumbotron jumbotron-fluid text-center">
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="mt-5">Automatic multitrack mixing with a differentiable <br> mixing console of neural audio effects</h1>
+            <hr>
+            <p class="lead">
+                <a href="https://www.christiansteinmetz.com/">Christian Steinmetz</a>, 
+                <a href="http://www.jordipons.me/">Jordi Pons</a>, 
+                <a href="https://scholar.google.es/citations?user=7cVOyh0AAAAJ&hl=ca">Santiago Pascual</a>, 
+                <a href="https://joanserra.weebly.com/">Joan Serrà</a>
+            </p>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="https://arxiv.org/abs/2010.10291" type="button" class="btn btn-secondary">Paper</a>
+                <a href="https://github.com/csteinmetz1/pymixconsole" type="button" class="btn btn-secondary">Code (pymixconsole)</a>
+                <a href="#" type="button" class="btn btn-secondary"></a>
+              </div>
+          </div>
+        </div>
+      </div>
+    
+    <div class="container">
+        <div class="section abstract">
+            <h2>Abstract</h1>
+            <hr>
+            <p>
+                Applications of deep learning to automatic multitrack mixing are largely unexplored. 
+                This is partly due to the limited available data, coupled with the fact that such data is relatively unstructured and variable. 
+                To address these challenges, we propose a domain-inspired model with a strong inductive bias for the mixing task. 
+                We achieve this with the application of pre-trained sub-networks and weight sharing, as well as with a sum/difference stereo loss function. 
+                The proposed model can be trained with a limited number of examples, is permutation invariant with respect to the input ordering, 
+                and places no limit on the number of input sources. 
+                Furthermore, it produces human-readable mixing parameters, allowing users to manually adjust or refine the generated mix. 
+                Results from a perceptual evaluation involving audio engineers indicate that our approach generates mixes that outperform baseline approaches. 
+                To the best of our knowledge, this work demonstrates the first approach in learning multitrack mixing conventions from real-world data at the waveform level, 
+                without knowledge of the underlying mixing parameters.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2 class="">Transformation Network</h1>
+            <hr>
+            <div class="row mb-4">
+                <div class="col-md-6 text-center">
+                    <img class="img-fluid" src="img/transform-net-detail.svg">
+                </div>
+                <div class="col-md-6">
+                    <p>The transformation network is tasked with emulating a series connection of digital audio effects. 
+                        In this case we train the transformation network to model an EQ, dynamic range compressor, and reverb. 
+                        To train this network we randomly configure the parameters of the signal chain, and process clean examples
+                        from the dataset to generate input and target pairs. 
+                        In the samples below, we shown the input signal and the target signal from the original signal chain with a number of random configurations,
+                        where EQ, compression, and reverb are all applied.  
+                        The remaining examples are the output of three trained models, TCN-10, TCN-20, and TCN-30. 
+                        All examples here come from the test set of the <a href="https://zenodo.org/record/3824876">SignalTrain LA2A Dataset</a>.
+                    </p>
+                </div>
+            </div>
+          
+            <table class="table table-sm text-center" style="vertical-align: middle;">
+                <tr>
+                    <th class="passage">Passage</th>
+                    <th>Input</th>
+                    <th>Target</th>
+                    <th>TCN-10</th>
+                    <th>TCN-20</th>
+                    <th>TCN-30</th>
+                </tr>
+                <tr>
+                    <td class="passage">A</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/a/002-01_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/a/002-01_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/a/002-01_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/a/002-01_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/a/002-01_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">B</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/b/004-00_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/b/004-00_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/b/004-00_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/b/004-00_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/b/004-00_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">C</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/c/006-02_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/c/006-02_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/c/006-02_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/c/006-02_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/c/006-02_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">D</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/d/012-02_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/d/012-02_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/d/012-02_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/d/012-02_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/d/012-02_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">E</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/e/013-03_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/e/013-03_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/e/013-03_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/e/013-03_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/e/013-03_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">F</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/f/015-02_input_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/f/015-02_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/f/015-02_TCN-10_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/f/015-02_TCN-20_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/channel/f/015-02_TCN-30_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </table>
+            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
+
+        </div>
+
+        <div class="section">
+            <h2 class="mt-5">Differentiable mixing console</h1>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <img class="m-4 img-fluid" src="img/full-system-simple.svg">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p> 
+                        After training the transformation network, we use the pre-trained weights from this model, 
+                        along with the encoder to build the differentiable mixing console (DMC). 
+                        Weights are shared across the input channels for these models, along with the post-processor.
+                        Here we show examples generated from songs in the test sets of the ENST-Drums and MedleyDB datasets.
+                        Our DMC model is compared against the mono mix and random mix baselines, as well as an adaptation of Demucs.
+                        We also include here the boxplots showing the results from a perceptual evaluation involving 16 audio engineers.
+                        They were asked to listen to the same passages shown below, and provide a rating for each on a scale from 0 and 1. 
+                    </p>
+                </div>
+            </div>
+
+            <h4 class="mt-3">ENST-drums basic mixing task</h4>
+            <div class="text-center">
+                <img class="img-fluid" src="img/enst-drums.svg">
+            </div>
+            <p></p>
+            <table class="table table-sm text-center" style="vertical-align: middle;">
+                <tr>
+                    <th class="passage">Passage</th>
+                    <th class="dmc">DMC (ours)</th>
+                    <th class="mono">Mono</th>
+                    <th class="rand">Random</th>
+                    <th class="target">Target</th>
+                    <th class="demucs">Demucs</th>
+                </tr>
+                <tr>
+                    <td class="passage">A</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/c/0004-0000_DMC-basic_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/c/0004-0000_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/c/0004-0000_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/c/0004-0000_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/c/0004-0000_Wave-U-Net_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td class="passage">B</td>
+
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/b/0003-0000_DMC-basic_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/b/0003-0000_mono_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/b/0003-0000_rand_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/b/0003-0000_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/b/0003-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">C</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/d/0008-0000_DMC-basic_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/d/0008-0000_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/d/0008-0000_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/d/0008-0000_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/d/0008-0000_Wave-U-Net_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">D</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/a/0001-0000_DMC-basic_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/a/0001-0000_mono_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/a/0001-0000_rand_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/a/0001-0000_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/a/0001-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">E</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/e/0014-0000_DMC-basic_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/e/0014-0000_mono_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/e/0014-0000_rand_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/e/0014-0000_target_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/enst-drums/e/0014-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </table>
+            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
+
+            <h4 class="mt-5">MedleyDB full mixing task</h4>
+            <div class="text-center">
+                <img class="img-fluid" src="img/medley-db-5.svg">
+            </div>
+            <table class="table table-sm text-center" style="vertical-align: middle;">
+                <tr>
+                    <th class="passage">Passage</th>
+                    <th class="dmc">DMC (ours)</th>
+                    <th class="mono">Mono</th>
+                    <th class="rand">Random</th>
+                    <th class="target">Target</th>
+                </tr>
+                <tr>
+                    <td class="passage">A</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/b/0000-0001_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/b/0000-0001_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/b/0000-0001_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/b/0000-0001_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">B</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_DMC-full-5_trim2_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_mono_trim2_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_rand_trim2_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_target_trim2_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">C</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/e/0006-0003_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/e/0006-0003_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/e/0006-0003_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/e/0006-0003_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">D</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/a/0000-0000_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/a/0000-0000_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/a/0000-0000_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/a/0000-0000_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="passage">E</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/d/0002-0003_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/d/0002-0003_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/d/0002-0003_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/d/0002-0003_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>      
+                </tr>
+                <tr>
+                    <td class="passage">F</td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_mono_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_rand_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls class="player">
+                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_target_trim_norm.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </table>
+            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
+
+        </div>
+
+        <!--- 
+        <div class="mt-2 section">
+            <h2>Related Projects</h2>
+            <hr>
+            <p>
+                Check out our related projects on using neural networks for audio effects! <br>
+            </p>
+            <div class='row vspace-top'>
+                <div class="col-sm-3">
+                    <img src='https://csteinmetz1.github.io/NeuralReverberator/slides/static/img/nr-rir.gif' class='img-fluid'>
+                </div>
+
+                <div class="col">
+                    <div class='paper-title'>
+                        <a href="https://ronn.ml">Randomized Overdrive Neural Networks</a>
+                    </div>
+                    <div>
+                        By processing audio signals in the time-domain with randomly weighted temporal convolutional networks (TCNs), 
+                        we uncover a wide range of novel, yet controllable overdrive effects. We discover that architectural aspects, 
+                        such as the depth of the network, the kernel size, the number of channels, the activation function, 
+                        as well as the weight initialization, all have a clear impact on the sonic character of the resultant effect, 
+                        without the need for training. 
+                        In practice, these effects range from conventional overdrive and distortion, 
+                        to more extreme effects, as the receptive field grows, similar to a fusion of distortion, equalization, delay, and reverb. 
+                        To enable use by musicians and producers, we provide a real-time plugin implementation. 
+                        This allows users to dynamically design networks, listening to the results in real-time.
+                    </div>
+                </div>
+            </div>
+            <div class='row vspace-top'>
+                <div class="col-sm-3">
+                    <img src='https://csteinmetz1.github.io/NeuralReverberator/slides/static/img/nr-rir.gif' class='img-fluid'>
+                </div>
+
+                <div class="col">
+                    <div class='paper-title'>
+                        <a href="https://www.christiansteinmetz.com/projects-blog/neuralreverberator">NeuralReverberator</a>
+                    </div>
+                    <div>
+                        Adding reverberation to musical sources is an essential part of creating an engaging listening experience. 
+                        NeuralReverberator is a convolutional reverb synthesizer that uses a spectral autoencoder as a generative model. 
+                        We implement the model as a real-time plugin that allows audio engineers to traverse the latent space of the autoencoder,
+                        and generate novel reverberation effect with varying timbre and duration. 
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class='row vspace-top'>
+                <div class="col-sm-3">
+                    <img src='https://floweq.ml/img/tf.gif' class='img-fluid'>
+                </div>
+
+                <div class="col">
+                    <div class='paper-title'>
+                        <a href="http://floweq.ml">flowEQ</a>
+                    </div>
+                    <div>
+                        We use a disentangled variational autoencoder (β-VAE) in order to provide a new modality for modifying the timbre of recordings via a parametric equalizer. 
+                        By traversing the learned latent space of the trained decoder network in the real-time plugin, 
+                        the user can more quickly search through the configurations of a five band parametric equalizer. 
+                        This methodology promotes using one’s ears to determine the proper EQ settings over looking at transfer functions or specific frequency controls.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="section">
+            <h2>Paper</h2>
+            <hr>
+            <div>
+                <div class="list-group">
+                    <a href="https://arxiv.org/abs/1234.5678"
+                    class="list-group-item">
+                        <img src="img/paper_thumbnail_sm.jpg" style="width:100%; margin-right:-20px; margin-top:-10px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="section">
+            <h2>Citation</h2>
+            <hr>
+            <div style="background-color: #e9ecef;">
+                <pre>
+                <code>
+    @article{steinmetz2020mixing,
+            title={Automatic multitrack mixing with a differentiable mixing console of neural audio effects},
+            author={Steinmetz, Christian J. and Pons, Jordi and Pascual, Santiago and Serrà, Joan},
+            journal={arXiv:2010.10291},
+            year={2020}}</code>
+                </pre>
+            </div>
+        </div>
+
+        <hr>
+        <footer>
+            <p>*Submitted to ICASSP 2021</p>
+            <p>Send feedback and questions to <a href="http://christiansteinmetz.com">Christian Steinmetz</a>.</p>
+        </footer>
+
+    </div>
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+  </body>
+</html>
