@@ -1,753 +1,940 @@
-
-
 <!doctype html>
-<html lang="en" class="h-100">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Despite the popularity of guitar effects, there is very little existing research on classification and parameter estimation of specific plugins or effect units from guitar recordings. 
-    In this paper, convolutional neural networks were used for classification and parameter estimation for 13 overdrive, distortion and fuzz guitar effects. 
-    A novel dataset of processed electric guitar samples was assembled, with four sub-datasets consisting of monophonic or polyphonic samples and discrete or continuous settings values, for a total of about 250 hours of processed samples. 
-    Results were compared for networks trained and tested on the same or on a different sub-dataset. 
-    We found that discrete datasets could lead to equally high performance as continuous ones, whilst being easier to design, analyse and modify. 
-    Classification accuracy was above 80\%, with confusion matrices reflecting similarities in the effects timbre and circuits design. 
-    With parameter values between 0.0 and 1.0, the mean absolute error is in most cases below 0.05, while the root mean square error is below 0.1 in all cases but one.">
-    <meta name="author" content="Marco Comunità">
-    <title>Title</title>
-    
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <meta name="theme-color" content="#563d7c">
-    <link rel="stylesheet" href="styles.css">
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Despite the popularity of guitar effects, there is very little existing research on classification and parameter estimation of specific plugins or effect units from guitar recordings. 
+        In this paper, convolutional neural networks were used for classification and parameter estimation for 13 overdrive, distortion and fuzz guitar effects. 
+        A novel dataset of processed electric guitar samples was assembled, with four sub-datasets consisting of monophonic or polyphonic samples and discrete or continuous settings values, for a total of about 250 hours of processed samples. 
+        Results were compared for networks trained and tested on the same or on a different sub-dataset. 
+        We found that discrete datasets could lead to equally high performance as continuous ones, whilst being easier to design, analyse and modify. 
+        Classification accuracy was above 80\%, with confusion matrices reflecting similarities in the effects timbre and circuits design. 
+        With parameter values between 0.0 and 1.0, the mean absolute error is in most cases below 0.05, while the root mean square error is below 0.1 in all cases but one.">
+        <meta name="author" content="Marco Comunità">
+        <title>Guitar Effects Recognition and Parameter Estimation with Convolutional Neural Networks</title>
 
-  </head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">    
+    </head>
   <body>
-    <!-- Page Content -->
-    <div class="jumbotron jumbotron-fluid text-center">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="mt-5">Test</h1>
-            <hr>
+    <div class="jumbotron jumbotron-fluid bg-dark">
+        <div class="container">
+            <h2 class="text-white">Guitar Effects Recognition and Parameter Estimation with Convolutional Neural Networks</h2>
             <p class="lead">
-                <a href="https://mcomunita.github.io/">Test</a>, 
+                <a href="https://mcomunita.github.io/">Marco Comunit&agrave;,</a> 
+                <a href="http://mcld.co.uk/research/">Dan Stowell,</a>
+                <a href="http://www.eecs.qmul.ac.uk/~josh/index.htm">Joshua D. Reiss</a> 
             </p>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="#" type="button" class="btn btn-secondary">Button1</a>
-                <a href="#" type="button" class="btn btn-secondary">Button2</a>
-                <a href="#" type="button" class="btn btn-secondary">Button3</a>
-              </div>
-          </div>
+            <a class="btn btn-success" href="https://arxiv.org/abs/2012.03216" role="button">Paper</a>
+            <a class="btn btn-light" href="https://github.com/mcomunita/gfx_classifier" role="button">Code</a>
+            <a class="btn btn-danger" href="https://github.com/mcomunita/gfx_classifier_models_and_results" role="button">Models + Results</a>
+            <!-- <a class="btn btn-light" href="#" role="button">Link</a> -->
+            <!-- <a class="btn btn-danger" href="#" role="button">Link</a> -->
+            <!-- <a class="btn btn-warning" href="#" role="button">Link</a> -->
+            <!-- <a class="btn btn-info" href="#" role="button">Link</a> -->
+            
+            <!-- <a class="btn btn-dark" href="#" role="button">Link</a> -->
         </div>
-      </div>
-    
-    <div class="container">
-        <div class="section abstract">
-            <h2>Header2</h2>
-            <hr>
-            <p>
-                Test
-            </p>
-        </div>
+    </div>
 
+    <div class="container" style="width: 70%;">
         <div class="section">
-            <h2 class="">Header2</h2>
-            <hr>
-            <div class="row mb-4">
-                <div class="col-md-6 text-center">
-                    <img class="img-fluid" src="#">
-                </div>
-                <div class="col-md-6">
-                    <!-- <p>The transformation network is tasked with emulating a series connection of digital audio effects. 
-                        In this case we train the transformation network to model an EQ, dynamic range compressor, and reverb. 
-                        To train this network we randomly configure the parameters of the signal chain, and process clean examples
-                        from the dataset to generate input and target pairs. 
-                        In the samples below, we shown the input signal and the target signal from the original signal chain with a number of random configurations,
-                        where EQ, compression, and reverb are all applied.  
-                        The remaining examples are the output of three trained models, TCN-10, TCN-20, and TCN-30. 
-                        All examples here come from the test set of the <a href="https://zenodo.org/record/3824876">SignalTrain LA2A Dataset</a>. -->
-                        Text
-                    </p>
-                </div>
-            </div>
-          
-            <table class="table table-sm text-center" style="vertical-align: middle;">
-                <tr>
-                    <th class="passage">Text</th>
-                    <th>Text</th>
-                    <th>Text</th>
-                    <th>Text</th>
-                </tr>
-                <tr>
-                    <td class="passage">A</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/a/002-01_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/a/002-01_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/a/002-01_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <!-- <tr>
-                    <td class="passage">B</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/b/004-00_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/b/004-00_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/b/004-00_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/b/004-00_TCN-20_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/b/004-00_TCN-30_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">C</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/c/006-02_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/c/006-02_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/c/006-02_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/c/006-02_TCN-20_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/c/006-02_TCN-30_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">D</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/d/012-02_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/d/012-02_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/d/012-02_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/d/012-02_TCN-20_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/d/012-02_TCN-30_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">E</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/e/013-03_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/e/013-03_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/e/013-03_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/e/013-03_TCN-20_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/e/013-03_TCN-30_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">F</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/f/015-02_input_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/f/015-02_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/f/015-02_TCN-10_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/f/015-02_TCN-20_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/channel/f/015-02_TCN-30_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr> -->
-            </table>
-            <p class="text-center">Text</p>
-
-        </div>
-
-        <!-- <div class="section">
-            <h2 class="mt-5">Differentiable mixing console</h1>
-            <hr>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <img class="m-4 img-fluid" src="img/full-system-simple.svg">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p> 
-                        After training the transformation network, we use the pre-trained weights from this model, 
-                        along with the encoder to build the differentiable mixing console (DMC). 
-                        Weights are shared across the input channels for these models, along with the post-processor.
-                        Here we show examples generated from songs in the test sets of the ENST-Drums and MedleyDB datasets.
-                        Our DMC model is compared against the mono mix and random mix baselines, as well as an adaptation of Demucs.
-                        We also include here the boxplots showing the results from a perceptual evaluation involving 16 audio engineers.
-                        They were asked to listen to the same passages shown below, and provide a rating for each on a scale from 0 and 1. 
-                    </p>
-                </div>
-            </div>
-
-            <h4 class="mt-3">ENST-drums basic mixing task</h4>
-            <div class="text-center">
-                <img class="img-fluid" src="img/enst-drums.svg">
-            </div>
-            <p></p>
-            <table class="table table-sm text-center" style="vertical-align: middle;">
-                <tr>
-                    <th class="passage">Passage</th>
-                    <th class="dmc">DMC (ours)</th>
-                    <th class="mono">Mono</th>
-                    <th class="rand">Random</th>
-                    <th class="target">Target</th>
-                    <th class="demucs">Demucs</th>
-                </tr>
-                <tr>
-                    <td class="passage">A</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/c/0004-0000_DMC-basic_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/c/0004-0000_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/c/0004-0000_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/c/0004-0000_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/c/0004-0000_Wave-U-Net_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                   
-                </tr>
-                <tr>
-                    <td class="passage">B</td>
-
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/b/0003-0000_DMC-basic_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/b/0003-0000_mono_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/b/0003-0000_rand_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/b/0003-0000_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/b/0003-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">C</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/d/0008-0000_DMC-basic_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/d/0008-0000_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/d/0008-0000_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/d/0008-0000_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/d/0008-0000_Wave-U-Net_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">D</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/a/0001-0000_DMC-basic_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/a/0001-0000_mono_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/a/0001-0000_rand_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/a/0001-0000_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/a/0001-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">E</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/e/0014-0000_DMC-basic_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/e/0014-0000_mono_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/e/0014-0000_rand_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/e/0014-0000_target_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/enst-drums/e/0014-0000_Wave-U-Net_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-            </table>
-            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
-
-            <h4 class="mt-5">MedleyDB full mixing task</h4>
-            <div class="text-center">
-                <img class="img-fluid" src="img/medley-db-5.svg">
-            </div>
-            <table class="table table-sm text-center" style="vertical-align: middle;">
-                <tr>
-                    <th class="passage">Passage</th>
-                    <th class="dmc">DMC (ours)</th>
-                    <th class="mono">Mono</th>
-                    <th class="rand">Random</th>
-                    <th class="target">Target</th>
-                </tr>
-                <tr>
-                    <td class="passage">A</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/b/0000-0001_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/b/0000-0001_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/b/0000-0001_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/b/0000-0001_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">B</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_DMC-full-5_trim2_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_mono_trim2_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_rand_trim2_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/g/MilkCowBlues_AngelaThomasWade_target_trim2_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">C</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/e/0006-0003_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/e/0006-0003_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/e/0006-0003_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/e/0006-0003_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">D</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/a/0000-0000_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/a/0000-0000_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/a/0000-0000_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/a/0000-0000_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="passage">E</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/d/0002-0003_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/d/0002-0003_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/d/0002-0003_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/d/0002-0003_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>      
-                </tr>
-                <tr>
-                    <td class="passage">F</td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_DMC-full-5_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_mono_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_rand_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                    <td>
-                        <audio controls class="player">
-                        <source src="audio/console/medley-db-5/h/MusicDelta_Beatles_target_trim_norm.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </td>
-                </tr>
-            </table>
-            <p class="text-center">All listening samples have been loudness normalized to -23 dB LUFS and encoded to VBR mp3.</p>
-
-        </div> -->
-
-        <!--- 
-        <div class="mt-2 section">
-            <h2>Related Projects</h2>
+            <h3>Abstract</h3>
             <hr>
             <p>
-                Check out our related projects on using neural networks for audio effects! <br>
+                Despite the popularity of guitar effects, there is very little existing research on classification and parameter estimation 
+                of specific plugins or effect units from guitar recordings. In this paper, convolutional neural networks were used for 
+                classification and parameter estimation for 13 overdrive, distortion and fuzz guitar effects. A novel dataset of processed 
+                electric guitar samples was assembled, with four sub-datasets consisting of monophonic or polyphonic samples and discrete or 
+                continuous settings values, for a total of about 250 hours of processed samples. Results were compared for networks trained 
+                and tested on the same or on a different sub-dataset. We found that discrete datasets could lead to equally high performance 
+                as continuous ones, whilst being easier to design, analyse and modify. Classification accuracy was above 80\%, with confusion 
+                matrices reflecting similarities in the effects timbre and circuits design. With parameter values between 0.0 and 1.0, 
+                the mean absolute error is in most cases below 0.05, while the root mean square error is below 0.1 in all cases but one.
             </p>
-            <div class='row vspace-top'>
-                <div class="col-sm-3">
-                    <img src='https://csteinmetz1.github.io/NeuralReverberator/slides/static/img/nr-rir.gif' class='img-fluid'>
-                </div>
-
-                <div class="col">
-                    <div class='paper-title'>
-                        <a href="https://ronn.ml">Randomized Overdrive Neural Networks</a>
-                    </div>
-                    <div>
-                        By processing audio signals in the time-domain with randomly weighted temporal convolutional networks (TCNs), 
-                        we uncover a wide range of novel, yet controllable overdrive effects. We discover that architectural aspects, 
-                        such as the depth of the network, the kernel size, the number of channels, the activation function, 
-                        as well as the weight initialization, all have a clear impact on the sonic character of the resultant effect, 
-                        without the need for training. 
-                        In practice, these effects range from conventional overdrive and distortion, 
-                        to more extreme effects, as the receptive field grows, similar to a fusion of distortion, equalization, delay, and reverb. 
-                        To enable use by musicians and producers, we provide a real-time plugin implementation. 
-                        This allows users to dynamically design networks, listening to the results in real-time.
-                    </div>
-                </div>
-            </div>
-            <div class='row vspace-top'>
-                <div class="col-sm-3">
-                    <img src='https://csteinmetz1.github.io/NeuralReverberator/slides/static/img/nr-rir.gif' class='img-fluid'>
-                </div>
-
-                <div class="col">
-                    <div class='paper-title'>
-                        <a href="https://www.christiansteinmetz.com/projects-blog/neuralreverberator">NeuralReverberator</a>
-                    </div>
-                    <div>
-                        Adding reverberation to musical sources is an essential part of creating an engaging listening experience. 
-                        NeuralReverberator is a convolutional reverb synthesizer that uses a spectral autoencoder as a generative model. 
-                        We implement the model as a real-time plugin that allows audio engineers to traverse the latent space of the autoencoder,
-                        and generate novel reverberation effect with varying timbre and duration. 
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class='row vspace-top'>
-                <div class="col-sm-3">
-                    <img src='https://floweq.ml/img/tf.gif' class='img-fluid'>
-                </div>
-
-                <div class="col">
-                    <div class='paper-title'>
-                        <a href="http://floweq.ml">flowEQ</a>
-                    </div>
-                    <div>
-                        We use a disentangled variational autoencoder (β-VAE) in order to provide a new modality for modifying the timbre of recordings via a parametric equalizer. 
-                        By traversing the learned latent space of the trained decoder network in the real-time plugin, 
-                        the user can more quickly search through the configurations of a five band parametric equalizer. 
-                        This methodology promotes using one’s ears to determine the proper EQ settings over looking at transfer functions or specific frequency controls.
-                    </div>
-                </div>
-            </div>
         </div>
+
         <br>
+        <div class="section">
+            <h3 class="">Dataset</h3>
+            <hr>
+    
+            <p>
+                To assemble our dataset we selected 13 overdrive, distortion and fuzz plug-ins designed to emulate some of the most iconic and 
+                widely used analogue guitar effect pedals. All the plugins have 2 or 3 controls and, regardless of the specific name adopted 
+                by the designer, the controls can be identified by their processing function: Level, Gain, Tone/Equalisation. 
+                
+                For training and testing purposes, 4 sub-datasets were generated, which will be referred to as 
+                <a href="https://doi.org/10.5281/zenodo.4298000">Mono Discrete</a> , 
+                <a href="https://doi.org/10.5281/zenodo.4296040">Mono Continuous</a>, 
+                <a href="https://doi.org/10.5281/zenodo.4298025">Poly Discrete</a> and 
+                <a href="https://doi.org/10.5281/zenodo.4298017">Poly Continuous</a>.
+            </p>
+            
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Designer</th>
+                        <th scope="col">Plugin</th>
+                        <th scope="col">Emulation of</th>
+                        <th scope="col">Id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Audified</th>
+                        <td>MultiDrive Pedal Pro</td>
+                        <td>Ibanez TS808</td>
+                        <td>808</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Ibanez TS9</td>
+                        <td>TS9</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Boss BD2</td>
+                        <td>BD2</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Boss OD1</td>
+                        <td>OD1</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Boss SD1</td>
+                        <td>SD1</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Boss DS1</td>
+                        <td>DS1</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>ProCo Rat</td>
+                        <td>RAT</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>MXR Distortion+</td>
+                        <td>DPL</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Arbiter Fuzz Face</td>
+                        <td>FFC</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td>Electro-Harmonix Big Muff</td>
+                        <td>BMF</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mercuriall</th>
+                        <td>Greed Smasher</td>
+                        <td>Mesa/Boogie Grid Slammer</td>
+                        <td>MGS</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Analog Obsession</th>
+                        <td>Pig Pie</td>
+                        <td>Electro-Harmonix Russian Big Muff</td>
+                        <td>RBM</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>Zupaa</td>
+                        <td>Vox Tone Bender</td>
+                        <td>VTB</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <p>
+            The first two subsets (Mono Discrete, Poly Discrete) use a discrete set of combinations selected as the most common 
+            and representative settings a person might use: Gain = [0.0, 0.1, 0.2, 0.5, 0.8, 1.0], Tone/Eq = [0.0, 0.2, 0.5, 0.8, 1.0]. 
+            Also, since the Level control has no effect on the output timbre it was set to 1.0 for every combination.
+            For the second two subsets (Mono Continuous, Poly Continuous), both unprocessed samples as well as settings' values were 
+            drawn from a uniform distribution.
+            </p>
+
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Gain</th>
+                        <th scope="col">Tone/Eq</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">808</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">TS9</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">BD2</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">OD1</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">SD1</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">DS1</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">RAT</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">DPL</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">FFC</th>
+                        <td>[1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">BMF</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">MGS</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">RBM</th>
+                        <td>[1.0]</td>
+                        <td>[0.2, 0.5, 0.8, 1.0]</td>
+                        <td>[0.0, 0.2, 0.5, 0.8, 1.0]</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">VTB</th>
+                        <td>[1.0]</td>
+                        <td>[0.1, 0.2, 0.5, 0.8, 1.0]</td>
+                        <td>---</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+
+        <br>
+        <div class="section">
+            <h3>Architecture</h3>
+            <hr>
+            <p>
+                The classification (FxNet) and estimation (SetNetCond) networks are both based on 2 convolutional and 3 fully connected layers, 
+                with batch normalisation layers at each hidden level. SetNetCond is conditioned on the effect class to improve the settings estimation.
+                In this way, once the plugin is identified by FxNet, we can pass the information to SetNetCond. FxNet is trained with cross-entropy loss
+                while SetNetCond with Mean Square Error
+            </p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Layer</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">#Fmaps</th>
+                        <th scope="col">Activation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Conv 2D</th>
+                        <td>5x5</td>
+                        <td>6</td>
+                        <td>Linear</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Batch Norm</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Activation</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>ReLU</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Max Pool</th>
+                        <td>2x2</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Conv 2D</th>
+                        <td>5x5</td>
+                        <td>12</td>
+                        <td>Linear</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Batch Norm</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Activation</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>ReLU</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Max Pool</th>
+                        <td>2x2</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fully Connected</th>
+                        <td>120</td>
+                        <td>-</td>
+                        <td>Linear</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Batch Norm</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Activation</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>ReLU</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fully Connected</th>
+                        <td>60</td>
+                        <td>-</td>
+                        <td>Linear</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Batch Norm</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Activation</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>ReLU</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fully Connected</th>
+                        <td>(1)</td>
+                        <td>-</td>
+                        <td>(2)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <p>
+                Trainable Parameters: FxNet = &sim;760k; SetNetCond = &sim;1.5M<br>
+                (1) FxNet = #Plug-ins - SetNet = #Settings<br>
+                (2) FxNet = Linear - SetNet = Tanh<br>
+            </p>
+        </div>
+
+        <br>
+        <div class="section">
+            <h3>Results: Classification</h3>
+            <hr>
+            <p>FxNet accuracy (%)</p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">
+                            <div class="text-right">Test</div>
+                            <div>Train</div>
+                        </th>
+                        <th scope="col">Mono Disc.</th>
+                        <th scope="col">Mono Cont.</th>
+                        <th scope="col">Poly Disc.</th>
+                        <th scope="col">Poly Cont.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Mono Disc.</th>
+                        <td>86.3</td>
+                        <td>83.1</td>
+                        <td>---</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mono Cont.</th>
+                        <td>81.3</td>
+                        <td>90.9</td>
+                        <td>---</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Disc.</th>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>88.4</td>
+                        <td>89.4</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Cont.</th>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>84.1</td>
+                        <td>91.4</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+
+            <p>Confusion matrix for all training/testing conditions on the 4 datasets.</p>
+            <p>Mono datasets:</p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_MD_MD.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MD_MC.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MC_MC.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MC_MD.png">
+            <p>Poly datasets:</p>
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PD_PD.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PD_PC.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PC.png">
+            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PD.png">
+            <p>808 and TS9 are very similar and cause a lot of misclassifications. Retraining the model without TS9 samples
+               the accuracy improves sensibly. The 808 is not misclassified anymore and also other plugins are better classified.
+            </p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_MD_MD_noTS9.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_PD_PD_noTS9.png">
+        </div>
+
+        <p>&nbsp;</p>
+        <div class="section">
+            <h3>Results: Estimation</h3>
+            <hr>
+            <p>SetNetCond errors</p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Train set</th>
+                        <th scope="col">Gain<br>MAE (RMSE)</th>
+                        <th scope="col">Tone/Eq<br>MAE (RMSE)</th>
+                        <th scope="col">Test set</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Mono Disc.</th>
+                        <td>0.030 (0.061)</td>
+                        <td>0.039 (0.070)</td>
+                        <th scope="row">Mono Disc.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>0.064 (0.084)</td>
+                        <td>0.044 (0.080)</td>
+                        <th scope="row">Mono Cont.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mono Cont.</th>
+                        <td>0.062 (0.096)</td>
+                        <td>0.067 (0.108)</td>
+                        <th scope="row">Mono Disc.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>0.033 (0.045)</td>
+                        <td>0.039 (0.072)</td>
+                        <th scope="row">Mono Cont.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Disc.</th>
+                        <td>0.017 (0.033)</td>
+                        <td>0.024 (0.047)</td>
+                        <th scope="row">Poly Disc.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>0.055 (0.070)</td>
+                        <td>0.038 (0.062)</td>
+                        <th scope="row">Poly Cont.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Cont.</th>
+                        <td>0.036 (0.063)</td>
+                        <td>0.036 (0.062)</td>
+                        <th scope="row">Poly Disc.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>0.020 (0.028)</td>
+                        <td>0.019 (0.034)</td>
+                        <th scope="row">Poly Cont.</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Avg</th>
+                        <td>0.040 (0.060)</td>
+                        <td>0.038 (0.066)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>&nbsp;</p><hr>
+            <p>Boxplots for all training/testing conditions on the 4 datasets (whiskers extend to 1.5 the interquartile range).</p>
+            <p>Mono datasets:</p>
+            <img class="img-fluid float-left" style="width: 25%;" src="images/setnetcond_bp_MD_MD.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_MD_MC.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_MC_MC.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_MC_MD.png">
+            <p>Poly datasets:</p>
+            <img class="img-fluid float-left" style="width: 25%;" src="images/setnetcond_bp_PD_PD.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_PD_PC.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_PC_PC.png">
+            <img class="img-fluid float-right" style="width: 25%;" src="images/setnetcond_bp_PC_PD.png">
+
+            <p>&nbsp;</p><hr>
+            <p>Scatterplots for all training/testing conditions on the 4 datasets.</p>
+            <p>Mono datasets:</p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MD_MD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MD_MD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MD_MC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MD_MC.png">
+            <p>&nbsp;</p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MC_MC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MC_MC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MC_MD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MC_MD.png">
+            <p>&nbsp;</p>
+            <p>Poly datasets:</p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PD_PD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PD_PD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PD_PC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PD_PC.png">
+            <p>&nbsp;</p>
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PC_PC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PC_PC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PC_PD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PC_PD.png">
+            
+            <p>&nbsp;</p><hr>
+            <p>Mean error and skew for all training/testing conditions on the 4 datasets.</p>
+            <p>Mono datasets:</p>
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_MD_MD.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_MD_MD.png">
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_MD_MC.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_MD_MC.png">
+            <p>&nbsp;</p>
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_MC_MC.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_MC_MC.png">
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_MC_MD.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_MC_MD.png">
+            <p>&nbsp;</p>
+            <p>Poly datasets:</p>
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_PD_PD.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_PD_PD.png">
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_PD_PC.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_PD_PC.png">
+            <p>&nbsp;</p>
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_PC_PC.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_PC_PC.png">
+            <img class="img-fluid float-left" style="width: 25.5%;" src="images/setnetcond_me_PC_PD.png">
+            <img class="img-fluid float-left" style="width: 24%;" src="images/setnetcond_sk_PC_PD.png">
+        </div>
 
         <div class="section">
-            <h2>Paper</h2>
+            <h3>Results: Listening Test</h3>
             <hr>
-            <div>
-                <div class="list-group">
-                    <a href="https://arxiv.org/abs/1234.5678"
-                    class="list-group-item">
-                        <img src="img/paper_thumbnail_sm.jpg" style="width:100%; margin-right:-20px; margin-top:-10px;">
-                    </a>
-                </div>
-            </div>
-        </div>
-        -->
+            <p>
+                To analyse the misclassifications reported in the confusion matrices we used an <a href="https://en.wikipedia.org/wiki/Discrimination_testing#Types_of_test">AXY test</a>. 
+                The test compared 808 vs TS9, OD1 vs SD1 and DPL vs RAT. In many cases, samples from these effects are misclassified. 
+                We wanted to understand whether listeners (8 in total) would incur in similar challenges trying to distinguish them. 
+                If the reference cannot be identified reliably with a low p-value (&lt;0.05), then the null hypothesis cannot be rejected and it cannot be proven 
+                that there is a perceptible difference between X and Y.
+                10 conditions compared the plugins of interest, while another 5 conditions where used to check that participants could reliably
+                distinguish between samples with clear perceivable differences.
+            </p>
+            
+            <h4>808 vs TS9</h4>
+            <p>In 9 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). Regardless of the settings, the 
+                two effects seem to be indistinguishable.
+            </p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">A</th>
+                        <th scope="col">X</th>
+                        <th scope="col">Y</th>
+                        <th scope="col">1-sided p-value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>G61-61311-808-O5T8-20630</td>
+                        <td>G61-61311-808-O5T8-20630</td>
+                        <td>G61-61311-TS9-D5T8-20630</td>
+                        <td style="background-color: palegreen;">0.6367</td>
+                    </tr>
+                    <tr>
+                        <td>G73-50205-808-O5T5-20845</td>
+                        <td>G73-50205-BMF-S5T5-20845</td>
+                        <td>G73-50205-808-O5T5-20845</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G91-73609-808-O8T10-21135</td>
+                        <td>G91-73609-808-O8T10-21135</td>
+                        <td>G91-73609-TS9-O8T10-21135</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G63-48108-808-O2T8-20679</td>
+                        <td>G63-48108-TS9-O2T8-20679</td>
+                        <td>G63-48108-808-O2T8-20679</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G73-60405-808-O5T10-20871</td>
+                        <td>G73-60405-808-O5T10-20871</td>
+                        <td>G73-60405-TS9-O5T10-20871</td>
+                        <td style="background-color: lightcoral;">0.0352</td>
+                    </tr>
+                    <tr>
+                        <td>G83-49109-808-O10T10-20992</td>
+                        <td>G83-49109-RAT-D10T10-20992</td>
+                        <td>G83-49109-808-O10T10-20992</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G61-49109-808-O5T0-20602</td>
+                        <td>G61-49109-808-O5T0-20602</td>
+                        <td>G61-49109-TS9-O5T0-20602</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G91-51206-808-O10T0-21080</td>
+                        <td>G91-51206-808-O10T0-21080</td>
+                        <td>G91-51206-TS9-O10T0-21080</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G71-48203-808-O10T2-20765</td>
+                        <td>G71-48203-BMF-S10T2-20765</td>
+                        <td>G71-48203-808-O10T2-20765</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G83-60310-808-O10T2-21019</td>
+                        <td>G83-60310-TS9-D10T2-21019</td>
+                        <td>G83-60310-808-O10T2-21019</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G93-69605-808-O8T2-21209</td>
+                        <td>G93-69605-RAT-D8T2-21209</td>
+                        <td>G93-69605-808-O8T2-21209</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G93-56306-TS9-D2T10-21171</td>
+                        <td>G93-56306-TS9-D2T10-21171</td>
+                        <td>G93-56306-808-O2T10-21171</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G71-55305-808-O8T5-20780</td>
+                        <td>G71-55305-808-O8T5-20780</td>
+                        <td>G71-55305-TS9-D8T5-20780</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G63-60405-808-O2T2-20715</td>
+                        <td>G63-60405-808-O2T2-20715</td>
+                        <td>G63-60405-BD2-G2T2-20715</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G91-57402-808-O10T10-21102</td>
+                        <td>G91-57402-808-O10T10-21102</td>
+                        <td>G91-57402-TS9-O10T10-21102</td>
+                        <td style="background-color: palegreen;">0.6367</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <!-- <div class="section">
-            <h2>Citation</h2>
+            <h4>OD1 vs SD1</h4>
+            <p>In 9 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). For Gain set to 0.2 or 0.5 the two
+                effects seem to be indistinguishable.
+            </p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">A</th>
+                        <th scope="col">X</th>
+                        <th scope="col">Y</th>
+                        <th scope="col">1-sided p-value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>G81-47202-OD1-D2-20920</td>
+                        <td>G81-47202-SD1-D2T5-20920</td>
+                        <td>G81-47202-OD1-D2-20920</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G91-44104-OD1-D5-21065</td>
+                        <td>G91-44104-OD1-D5-21065</td>
+                        <td>G91-44104-DPL-D5-21065</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G63-55400-OD1-D5-20710</td>
+                        <td>G63-55400-MGS-D5-20710</td>
+                        <td>G63-55400-OD1-D5-20710</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G91-59404-OD1-D2-21104</td>
+                        <td>G91-59404-RAT-D2F5-21104</td>
+                        <td>G91-59404-OD1-D2-21104</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G73-60405-OD1-D5-20871</td>
+                        <td>G73-60405-SD1-D5T5-20871</td>
+                        <td>G73-60405-OD1-D5-20871</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G83-52207-OD1-D2-21003</td>
+                        <td>G83-52207-RAT-D2F5-21003</td>
+                        <td>G83-52207-OD1-D2-21003</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G81-65506-OD1-D5-20963</td>
+                        <td>G81-65506-OD1-D5-20963</td>
+                        <td>G81-65506-SD1-D5T2-20963</td>
+                        <td style="background-color: palegreen;">0.6367</td>
+                    </tr>
+                    <tr>
+                        <td>G81-51206-OD1-D2-20924</td>
+                        <td>G81-51206-DPL-D2-20924</td>
+                        <td>G81-51206-OD1-D2-20924</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G81-59500-OD1-D2-20957</td>
+                        <td>G81-59500-OD1-D2-20957</td>
+                        <td>G81-59500-SD1-D2T5-20957</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G93-48203-OD1-D2-21155</td>
+                        <td>G93-48203-SD1-D2T2-21155</td>
+                        <td>G93-48203-OD1-D2-21155</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G73-46201-OD1-D2-20841</td>
+                        <td>G73-46201-OD1-D2-20841</td>
+                        <td>G73-46201-SD1-D2T5-20841</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G63-69510-OD1-D5-20733</td>
+                        <td>G63-69510-SD1-D5T2-20733</td>
+                        <td>G63-69510-OD1-D5-20733</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G63-65506-OD1-D5-20729</td>
+                        <td>G63-65506-SD1-D5T5-20729</td>
+                        <td>G63-65506-OD1-D5-20729</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G63-60310-OD1-D2-20707</td>
+                        <td>G63-60310-SD1-D2T2-20707</td>
+                        <td>G63-60310-OD1-D2-20707</td>
+                        <td style="background-color: palegreen;">0.3633</td>
+                    </tr>
+                    <tr>
+                        <td>G81-65410-OD1-D5-20954</td>
+                        <td>G81-65410-OD1-D5-20954</td>
+                        <td>G81-65410-SD1-D5T5-20954</td>
+                        <td style="background-color: lightcoral;">0.0352</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>DPL vs RAT</h4>
+            <p>In 5 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). In some cases, the DPL with Gain
+                set to 1.0 seems to be indistinguishable from the RAT with Gain set to 0.5.
+            </p>
+            <table class="table table-sm table-borderless">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">A</th>
+                        <th scope="col">X</th>
+                        <th scope="col">Y</th>
+                        <th scope="col">1-sided p-value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>G63-61406-DPL-D10-20716  		</td>
+                        <td>G63-61406-DPL-D10-20716</td>
+                        <td>G63-61406-RBM-T10S10-20716</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G63-65601-DPL-D10-20737 	 	</td>
+                        <td>G63-65601-DPL-D10-20737</td>
+                        <td>G63-65601-RAT-D2F0-20737</td>
+                        <td style="background-color: lightcoral;">0.0352</td>
+                    </tr>
+                    <tr>
+                        <td>G63-50205-DPL-D10-20689  		</td>
+                        <td>G63-50205-RBM-D10-20689</td>
+                        <td>G63-50205-DPL-D10-20689</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G91-67603-DPL-D10-21129  		</td>
+                        <td>G91-67603-DPL-D10-21129</td>
+                        <td>G91-67603-808-D10T10-21129</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G73-52207-DPL-D10-20847  		</td>
+                        <td>G73-52207-808-D10-20847</td>
+                        <td>G73-52207-DPL-D10-20847</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G93-57307-DPL-D10-21172  		</td>
+                        <td>G93-57307-DPL-D10-21172</td>
+                        <td>G93-57307-RBM-T8S10-21172</td>
+                        <td>0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G91-55400-DPL-D10-21100  		</td>
+                        <td>G91-55400-DPL-D10-21100</td>
+                        <td>G91-55400-RAT-D5F0-21100</td>
+                        <td style="background-color: lightcoral;">0.0352</td>
+                    </tr>
+                    <tr>
+                        <td>G91-61502-DPL-D10-21115  		</td>
+                        <td>G91-61502-RAT-D5F0-21115</td>
+                        <td>G91-61502-DPL-D10-21115</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G63-50300-DPL-D10-20697  		</td>
+                        <td>G63-50300-RAT-D5F0-20697</td>
+                        <td>G63-50300-DPL-D10-20697</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G73-68604-DPL-D10-20896  		</td>
+                        <td>G73-68604-RAT-D2F0-20896</td>
+                        <td>G73-68604-DPL-D10-20896</td>
+                        <td style="background-color: lightcoral;">0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G61-50110-DPL-D10-20603  		</td>
+                        <td>G61-50110-RAT-D5F0-20603</td>
+                        <td>G61-50110-DPL-D10-20603</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G93-76612-DPL-D10-21216  		</td>
+                        <td>G93-76612-DPL-D10-21216</td>
+                        <td>G93-76612-RAT-D5F0-21216</td>
+                        <td style="background-color: palegreen;">0.1445</td>
+                    </tr>
+                    <tr>
+                        <td>G61-65506-DPL-D10-20651 	 	</td>
+                        <td>G61-65506-RAT-D5F0-20651</td>
+                        <td>G61-65506-DPL-D10-20651</td>
+                        <td style="background-color: lightcoral;">0.0039</td>
+                    </tr>
+                    <tr>
+                        <td>G71-64409-DPL-D10-20797  		</td>
+                        <td>G71-64409-DPL-D10-20797</td>
+                        <td>G71-64409-RAT-D5F0-20797</td>
+                        <td style="background-color: palegreen;">0.6367</td>
+                    </tr>
+                    <tr>
+                        <td>G61-61406-DPL-D10-20638  	</td>
+                        <td>G61-61406-DPL-D10-20638	</td>
+                        <td>G61-61406-RAT-D5F0-20638</td>
+                        <td style="background-color: lightcoral;">0.0039</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Citation</h3>
             <hr>
-            <div style="background-color: #e9ecef;">
+            <div style="background-color: lightgray;">
                 <pre>
                 <code>
-            @article{steinmetz2020mixing,
-            title={Automatic multitrack mixing with a differentiable mixing console of neural audio effects},
-            author={Steinmetz, Christian J. and Pons, Jordi and Pascual, Santiago and Serrà, Joan},
-            journal={arXiv:2010.10291},
+    @article{comunita2020guitar,
+            title={Guitar Effects Recognition and Parameter Estimation with Convolutional Neural Networks},
+            author={Comunit{\`a}, Marco and Stowell, Dan and Reiss, Joshua D},
+            journal={arXiv preprint arXiv:2012.03216},
             year={2020}}</code>
                 </pre>
             </div>
-        </div> -->
+        </div>
 
         <!-- <hr>
         <footer>
@@ -756,17 +943,11 @@
         </footer> -->
 
     </div>
-
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-            crossorigin="anonymous"></script>
-  </body>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+</body>
 </html>
