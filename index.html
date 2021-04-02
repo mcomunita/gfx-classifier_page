@@ -18,9 +18,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">    
     </head>
   <body>
-    <div class="jumbotron jumbotron-fluid bg-dark">
+    <div class="jumbotron jumbotron-fluid bg-dark text-center">
         <div class="container">
-            <h2 class="text-white">Guitar Effects Recognition and Parameter Estimation with Convolutional Neural Networks</h2>
+            <h1 class="text-white">Guitar Effects Recognition and Parameter Estimation <br>with Convolutional Neural Networks</h1>
             <p class="lead">
                 <a href="https://mcomunita.github.io/">Marco Comunit&agrave;,</a> 
                 <a href="http://mcld.co.uk/research/">Dan Stowell,</a>
@@ -40,7 +40,7 @@
 
     <div class="container" style="width: 70%;">
         <div class="section">
-            <h3>Abstract</h3>
+            <h2>Abstract</h2>
             <hr>
             <p>
                 Despite the popularity of guitar effects, there is very little existing research on classification and parameter estimation 
@@ -57,7 +57,7 @@
 
         <br>
         <div class="section">
-            <h3 class="">Dataset</h3>
+            <h2 class="">Dataset</h2>
             <hr>
     
             <p>
@@ -266,7 +266,7 @@
 
         <br>
         <div class="section">
-            <h3>Architecture</h3>
+            <h2>Architecture</h2>
             <hr>
             <p>
                 The classification (FxNet) and estimation (SetNetCond) networks are both based on 2 convolutional and 3 fully connected layers, 
@@ -384,12 +384,12 @@
             </p>
         </div>
 
-        <br>
+        <p>&nbsp;</p>
         <div class="section">
-            <h3>Results: Classification</h3>
+            <h2>Results: Classification</h2>
             <hr>
             <p>FxNet accuracy (%)</p>
-            <table class="table table-sm table-borderless">
+            <table class="table table-sm table-borderless" style="width: 100%;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">
@@ -455,7 +455,7 @@
 
         <p>&nbsp;</p>
         <div class="section">
-            <h3>Results: Estimation</h3>
+            <h2>Results: Estimation</h2>
             <hr>
             <p>SetNetCond errors</p>
             <table class="table table-sm table-borderless">
@@ -540,27 +540,32 @@
             <p>&nbsp;</p><hr>
             <p>Scatterplots for all training/testing conditions on the 4 datasets.</p>
             <p>Mono datasets:</p>
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MD_MD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MD_MD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MD_MC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MD_MC.png">
-            <p>&nbsp;</p>
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MC_MC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MC_MC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_MC_MD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_MC_MD.png">
-            <p>&nbsp;</p>
-            <p>Poly datasets:</p>
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PD_PD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PD_PD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PD_PC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PD_PC.png">
-            <p>&nbsp;</p>
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PC_PC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PC_PC.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_gain_PC_PD.png">
-            <img class="img-fluid float-left" style="width: 50%;" src="images/setnetcond_sp_tone_PC_PD.png">
+            <div class="col-md-12 text-center">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_MD_MD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_MD_MD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_MD_MC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_MD_MC.png">
             
+                <p>&nbsp;</p>
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_MC_MC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_MC_MC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_MC_MD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_MC_MD.png">
+                <p>&nbsp;</p>
+            </div>
+            <p>Poly datasets:</p>
+            <div class="col-md-12 text-center">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_PD_PD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_PD_PD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_PD_PC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_PD_PC.png">
+                
+                <p>&nbsp;</p>
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_PC_PC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_PC_PC.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_gain_PC_PD.png">
+                <img class="img-fluid" style="width: 40%;" src="images/setnetcond_sp_tone_PC_PD.png">
+            </div>
             <p>&nbsp;</p><hr>
             <p>Mean error and skew for all training/testing conditions on the 4 datasets.</p>
             <p>Mono datasets:</p>
@@ -587,7 +592,7 @@
         </div>
 
         <div class="section">
-            <h3>Results: Listening Test</h3>
+            <h2>Results: Listening Test</h2>
             <hr>
             <p>
                 To analyse the misclassifications reported in the confusion matrices we used an <a href="https://en.wikipedia.org/wiki/Discrimination_testing#Types_of_test">AXY test</a>. 
@@ -922,7 +927,7 @@
         </div>
 
         <div class="section">
-            <h3>Citation</h3>
+            <h2>Citation</h2>
             <hr>
             <div style="background-color: lightgray;">
                 <pre>
