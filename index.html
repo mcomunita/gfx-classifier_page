@@ -65,7 +65,7 @@
                 widely used analogue guitar effect pedals. All the plugins have 2 or 3 controls and, regardless of the specific name adopted 
                 by the designer, the controls can be identified by their processing function: Level, Gain, Tone/Equalisation. 
                 
-                For training and testing purposes, 4 sub-datasets were generated, which will be referred to as 
+                For training and testing purposes, 4 sub-datasets were generated: 
                 <a href="https://doi.org/10.5281/zenodo.4298000">Mono Discrete</a> , 
                 <a href="https://doi.org/10.5281/zenodo.4296040">Mono Continuous</a>, 
                 <a href="https://doi.org/10.5281/zenodo.4298025">Poly Discrete</a> and 
@@ -446,9 +446,11 @@
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PD_PC.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PC.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PD.png">
-            <p>808 and TS9 are very similar and cause a lot of misclassifications. Retraining the model without TS9 samples
+            
+            <p>808 and TS9 are very similar and cause a lot of misclassifications. Retraining the model without TS9 samples,
                the accuracy improves sensibly. The 808 is not misclassified anymore and also other plugins are better classified.
             </p>
+            
             <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_MD_MD_noTS9.png">
             <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_PD_PD_noTS9.png">
         </div>
