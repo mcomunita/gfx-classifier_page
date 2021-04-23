@@ -391,7 +391,7 @@
         <div class="section">
             <h2>Results: Classification</h2>
             <hr>
-            <p>FxNet accuracy (%)</p>
+            <p><b>FxNet accuracy (%)</b></p>
             <table class="table table-sm table-borderless" style="width: 100%;">
                 <thead class="thead-dark">
                     <tr>
@@ -442,12 +442,12 @@
             <p>Mono datasets:</p>
             <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_MD_MD.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MD_MC.png">
-            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MC_MC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_MC_MC.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_MC_MD.png">
             <p>Poly datasets:</p>
-            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PD_PD.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_PD_PD.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PD_PC.png">
-            <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PC.png">
+            <img class="img-fluid float-left" style="width: 50%;" src="images/fxnet_cm_PC_PC.png">
             <img class="img-fluid float-right" style="width: 50%;" src="images/fxnet_cm_PC_PD.png">
             
             <p>808 and TS9 are very similar and cause a lot of misclassifications. Retraining the model without TS9 samples,
@@ -462,7 +462,54 @@
         <div class="section">
             <h2>Results: Estimation</h2>
             <hr>
-            <p>SetNetCond errors</p>
+            <p><b>SetNetCond accuracy (%)</b> - We define accuracy as the percentage of samples for which all settings are estimated with an absolute error below 0.1.</p>
+            
+            <table class="table table-sm table-borderless" style="width: 100%;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">
+                            <div class="text-right">Test</div>
+                            <div>Train</div>
+                        </th>
+                        <th scope="col">Mono Disc.</th>
+                        <th scope="col">Mono Cont.</th>
+                        <th scope="col">Poly Disc.</th>
+                        <th scope="col">Poly Cont.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Mono Disc.</th>
+                        <td>80.06</td>
+                        <td>68.56</td>
+                        <td>---</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mono Cont.</th>
+                        <td>68.51</td>
+                        <td>85.14</td>
+                        <td>---</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Disc.</th>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>90.75</td>
+                        <td>75.74</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Poly Cont.</th>
+                        <td>---</td>
+                        <td>---</td>
+                        <td>88.93</td>
+                        <td>97.01</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <p><b>SetNetCond errors</b> - For more details we also measure MAE and RMSE</p>
             <table class="table table-sm table-borderless">
                 <thead class="thead-dark">
                     <tr>
@@ -603,8 +650,8 @@
                 To analyse the misclassifications reported in the confusion matrices we used an <a href="https://en.wikipedia.org/wiki/Discrimination_testing#Types_of_test">AXY test</a>. 
                 The test compared 808 vs TS9, OD1 vs SD1 and DPL vs RAT. In many cases, samples from these effects are misclassified. 
                 We wanted to understand whether listeners (8 in total) would incur in similar challenges trying to distinguish them. 
-                If the reference cannot be identified reliably with a low p-value (&lt;0.05), then the null hypothesis cannot be rejected and it cannot be proven 
-                that there is a perceptible difference between X and Y.
+                If the reference cannot be identified reliably, i.e., with a low p-value (&lt;0.05), then the null hypothesis cannot be rejected and it cannot be proven 
+                that there is a perceptible difference between X and Y. We use the 1-sided p-value for our evaluation but include also the 2-sided one.
                 10 conditions compared the plugins of interest, while another 5 conditions where used to check that participants could reliably
                 distinguish between samples with clear perceivable differences.
             </p>
@@ -613,13 +660,23 @@
             <p>In 9 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). Regardless of the settings, the 
                 two effects seem to be indistinguishable.
             </p>
-            <table class="table table-sm table-borderless">
+            <table class="table table-sm table-borderless" style="font-size: 10px;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">A</th>
                         <th scope="col">X</th>
                         <th scope="col">Y</th>
-                        <th scope="col">1-sided p-value</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">P1</th>
+                        <th scope="col">P2</th>
+                        <th scope="col">P3</th>
+                        <th scope="col">P4</th>
+                        <th scope="col">P5</th>
+                        <th scope="col">P6</th>
+                        <th scope="col">P7</th>
+                        <th scope="col">P8</th>
+                        <th scope="col" style="text-align: center;">1-sided p-value</th>
+                        <th scope="col" style="text-align: center;">2-sided p-value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -627,91 +684,241 @@
                         <td>G61-61311-808-O5T8-20630</td>
                         <td>G61-61311-808-O5T8-20630</td>
                         <td>G61-61311-TS9-D5T8-20630</td>
-                        <td style="background-color: palegreen;">0.6367</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;"> Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.6367</td>
+                        <td style="background-color: palegreen; text-align: center;">1.0000</td>
                     </tr>
                     <tr>
                         <td>G73-50205-808-O5T5-20845</td>
                         <td>G73-50205-BMF-S5T5-20845</td>
                         <td>G73-50205-808-O5T5-20845</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G91-73609-808-O8T10-21135</td>
                         <td>G91-73609-808-O8T10-21135</td>
                         <td>G91-73609-TS9-O8T10-21135</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G63-48108-808-O2T8-20679</td>
                         <td>G63-48108-TS9-O2T8-20679</td>
                         <td>G63-48108-808-O2T8-20679</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G73-60405-808-O5T10-20871</td>
                         <td>G73-60405-808-O5T10-20871</td>
                         <td>G73-60405-TS9-O5T10-20871</td>
-                        <td style="background-color: lightcoral;">0.0352</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral; text-align: center;"">0.0352</td>
+                        <td style="background-color: palegreen; text-align: center;"">0.0703</td>
                     </tr>
                     <tr>
                         <td>G83-49109-808-O10T10-20992</td>
                         <td>G83-49109-RAT-D10T10-20992</td>
                         <td>G83-49109-808-O10T10-20992</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G61-49109-808-O5T0-20602</td>
                         <td>G61-49109-808-O5T0-20602</td>
                         <td>G61-49109-TS9-O5T0-20602</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G91-51206-808-O10T0-21080</td>
                         <td>G91-51206-808-O10T0-21080</td>
                         <td>G91-51206-TS9-O10T0-21080</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G71-48203-808-O10T2-20765</td>
                         <td>G71-48203-BMF-S10T2-20765</td>
                         <td>G71-48203-808-O10T2-20765</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G83-60310-808-O10T2-21019</td>
                         <td>G83-60310-TS9-D10T2-21019</td>
                         <td>G83-60310-808-O10T2-21019</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G93-69605-808-O8T2-21209</td>
                         <td>G93-69605-RAT-D8T2-21209</td>
                         <td>G93-69605-808-O8T2-21209</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G93-56306-TS9-D2T10-21171</td>
                         <td>G93-56306-TS9-D2T10-21171</td>
                         <td>G93-56306-808-O2T10-21171</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G71-55305-808-O8T5-20780</td>
                         <td>G71-55305-808-O8T5-20780</td>
                         <td>G71-55305-TS9-D8T5-20780</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G63-60405-808-O2T2-20715</td>
                         <td>G63-60405-808-O2T2-20715</td>
                         <td>G63-60405-BD2-G2T2-20715</td>
-                        <td>0.0039</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G91-57402-808-O10T10-21102</td>
                         <td>G91-57402-808-O10T10-21102</td>
                         <td>G91-57402-TS9-O10T10-21102</td>
-                        <td style="background-color: palegreen;">0.6367</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.6367</td>
+                        <td style="background-color: palegreen; text-align: center;">1.0000</td>
                     </tr>
                 </tbody>
             </table>
@@ -720,13 +927,23 @@
             <p>In 9 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). For Gain set to 0.2 or 0.5 the two
                 effects seem to be indistinguishable.
             </p>
-            <table class="table table-sm table-borderless">
+            <table class="table table-sm table-borderless" style="font-size: 10px;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">A</th>
                         <th scope="col">X</th>
                         <th scope="col">Y</th>
-                        <th scope="col">1-sided p-value</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">P1</th>
+                        <th scope="col">P2</th>
+                        <th scope="col">P3</th>
+                        <th scope="col">P4</th>
+                        <th scope="col">P5</th>
+                        <th scope="col">P6</th>
+                        <th scope="col">P7</th>
+                        <th scope="col">P8</th>
+                        <th scope="col" style="text-align: center;">1-sided p-value</th>
+                        <th scope="col" style="text-align: center;">2-sided p-value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -734,91 +951,241 @@
                         <td>G81-47202-OD1-D2-20920</td>
                         <td>G81-47202-SD1-D2T5-20920</td>
                         <td>G81-47202-OD1-D2-20920</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G91-44104-OD1-D5-21065</td>
                         <td>G91-44104-OD1-D5-21065</td>
                         <td>G91-44104-DPL-D5-21065</td>
-                        <td>0.0039</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G63-55400-OD1-D5-20710</td>
                         <td>G63-55400-MGS-D5-20710</td>
                         <td>G63-55400-OD1-D5-20710</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G91-59404-OD1-D2-21104</td>
                         <td>G91-59404-RAT-D2F5-21104</td>
                         <td>G91-59404-OD1-D2-21104</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G73-60405-OD1-D5-20871</td>
                         <td>G73-60405-SD1-D5T5-20871</td>
                         <td>G73-60405-OD1-D5-20871</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G83-52207-OD1-D2-21003</td>
                         <td>G83-52207-RAT-D2F5-21003</td>
                         <td>G83-52207-OD1-D2-21003</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G81-65506-OD1-D5-20963</td>
                         <td>G81-65506-OD1-D5-20963</td>
                         <td>G81-65506-SD1-D5T2-20963</td>
-                        <td style="background-color: palegreen;">0.6367</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.6367</td>
+                        <td style="background-color: palegreen; text-align: center;">1.0000</td>
                     </tr>
                     <tr>
                         <td>G81-51206-OD1-D2-20924</td>
                         <td>G81-51206-DPL-D2-20924</td>
                         <td>G81-51206-OD1-D2-20924</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
                         <td>G81-59500-OD1-D2-20957</td>
                         <td>G81-59500-OD1-D2-20957</td>
                         <td>G81-59500-SD1-D2T5-20957</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G93-48203-OD1-D2-21155</td>
                         <td>G93-48203-SD1-D2T2-21155</td>
                         <td>G93-48203-OD1-D2-21155</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
                         <td>G73-46201-OD1-D2-20841</td>
                         <td>G73-46201-OD1-D2-20841</td>
                         <td>G73-46201-SD1-D2T5-20841</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G63-69510-OD1-D5-20733</td>
                         <td>G63-69510-SD1-D5T2-20733</td>
                         <td>G63-69510-OD1-D5-20733</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G63-65506-OD1-D5-20729</td>
                         <td>G63-65506-SD1-D5T5-20729</td>
                         <td>G63-65506-OD1-D5-20729</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G63-60310-OD1-D2-20707</td>
                         <td>G63-60310-SD1-D2T2-20707</td>
                         <td>G63-60310-OD1-D2-20707</td>
-                        <td style="background-color: palegreen;">0.3633</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.3633</td>
+                        <td style="background-color: palegreen; text-align: center;">0.7266</td>
                     </tr>
                     <tr>
                         <td>G81-65410-OD1-D5-20954</td>
                         <td>G81-65410-OD1-D5-20954</td>
                         <td>G81-65410-SD1-D5T5-20954</td>
-                        <td style="background-color: lightcoral;">0.0352</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0352</td>
+                        <td style="background-color: palegreen; text-align: center;">0.0703</td>
                     </tr>
                 </tbody>
             </table>
@@ -827,105 +1194,265 @@
             <p>In 5 out of 10 cases the participants could not reliably distinguish between X and Y (p &gt;0.05). In some cases, the DPL with Gain
                 set to 1.0 seems to be indistinguishable from the RAT with Gain set to 0.5.
             </p>
-            <table class="table table-sm table-borderless">
+            <table class="table table-sm table-borderless" style="font-size: 10px;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">A</th>
                         <th scope="col">X</th>
                         <th scope="col">Y</th>
-                        <th scope="col">1-sided p-value</th>
+                        <th scope="col">Correct</th>
+                        <th scope="col">P1</th>
+                        <th scope="col">P2</th>
+                        <th scope="col">P3</th>
+                        <th scope="col">P4</th>
+                        <th scope="col">P5</th>
+                        <th scope="col">P6</th>
+                        <th scope="col">P7</th>
+                        <th scope="col">P8</th>
+                        <th scope="col" style="text-align: center;">1-sided p-value</th>
+                        <th scope="col" style="text-align: center;">2-sided p-value</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>G63-61406-DPL-D10-20716  		</td>
+                        <td>G63-61406-DPL-D10-20716</td>
                         <td>G63-61406-DPL-D10-20716</td>
                         <td>G63-61406-RBM-T10S10-20716</td>
-                        <td>0.0039</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G63-65601-DPL-D10-20737 	 	</td>
+                        <td>G63-65601-DPL-D10-20737</td>
                         <td>G63-65601-DPL-D10-20737</td>
                         <td>G63-65601-RAT-D2F0-20737</td>
-                        <td style="background-color: lightcoral;">0.0352</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0352</td>
+                        <td style="background-color: palegreen; text-align: center;">0.0703</td>
                     </tr>
                     <tr>
-                        <td>G63-50205-DPL-D10-20689  		</td>
+                        <td>G63-50205-DPL-D10-20689</td>
                         <td>G63-50205-RBM-D10-20689</td>
                         <td>G63-50205-DPL-D10-20689</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G91-67603-DPL-D10-21129  		</td>
+                        <td>G91-67603-DPL-D10-21129</td>
                         <td>G91-67603-DPL-D10-21129</td>
                         <td>G91-67603-808-D10T10-21129</td>
-                        <td>0.0039</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G73-52207-DPL-D10-20847  		</td>
+                        <td>G73-52207-DPL-D10-20847</td>
                         <td>G73-52207-808-D10-20847</td>
                         <td>G73-52207-DPL-D10-20847</td>
-                        <td>0.0039</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td>Y</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G93-57307-DPL-D10-21172  		</td>
+                        <td>G93-57307-DPL-D10-21172</td>
                         <td>G93-57307-DPL-D10-21172</td>
                         <td>G93-57307-RBM-T8S10-21172</td>
-                        <td>0.0039</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td>X</td>
+                        <td style="text-align: center;">0.0039</td>
+                        <td style="text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G91-55400-DPL-D10-21100  		</td>
+                        <td>G91-55400-DPL-D10-21100</td>
                         <td>G91-55400-DPL-D10-21100</td>
                         <td>G91-55400-RAT-D5F0-21100</td>
-                        <td style="background-color: lightcoral;">0.0352</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0352</td>
+                        <td style="background-color: palegreen; text-align: center;">0.0703</td>
                     </tr>
                     <tr>
-                        <td>G91-61502-DPL-D10-21115  		</td>
+                        <td>G91-61502-DPL-D10-21115</td>
                         <td>G91-61502-RAT-D5F0-21115</td>
                         <td>G91-61502-DPL-D10-21115</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
-                        <td>G63-50300-DPL-D10-20697  		</td>
+                        <td>G63-50300-DPL-D10-20697</td>
                         <td>G63-50300-RAT-D5F0-20697</td>
                         <td>G63-50300-DPL-D10-20697</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
-                        <td>G73-68604-DPL-D10-20896  		</td>
+                        <td>G73-68604-DPL-D10-20896</td>
                         <td>G73-68604-RAT-D2F0-20896</td>
                         <td>G73-68604-DPL-D10-20896</td>
-                        <td style="background-color: lightcoral;">0.0039</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0039</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G61-50110-DPL-D10-20603  		</td>
+                        <td>G61-50110-DPL-D10-20603</td>
                         <td>G61-50110-RAT-D5F0-20603</td>
                         <td>G61-50110-DPL-D10-20603</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral;">X</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
-                        <td>G93-76612-DPL-D10-21216  		</td>
+                        <td>G93-76612-DPL-D10-21216</td>
                         <td>G93-76612-DPL-D10-21216</td>
                         <td>G93-76612-RAT-D5F0-21216</td>
-                        <td style="background-color: palegreen;">0.1445</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.1445</td>
+                        <td style="background-color: palegreen; text-align: center;">0.2891</td>
                     </tr>
                     <tr>
-                        <td>G61-65506-DPL-D10-20651 	 	</td>
+                        <td>G61-65506-DPL-D10-20651</td>
                         <td>G61-65506-RAT-D5F0-20651</td>
                         <td>G61-65506-DPL-D10-20651</td>
-                        <td style="background-color: lightcoral;">0.0039</td>
+                        <td>Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: palegreen;">Y</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0039</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0078</td>
                     </tr>
                     <tr>
-                        <td>G71-64409-DPL-D10-20797  		</td>
+                        <td>G71-64409-DPL-D10-20797</td>
                         <td>G71-64409-DPL-D10-20797</td>
                         <td>G71-64409-RAT-D5F0-20797</td>
-                        <td style="background-color: palegreen;">0.6367</td>
+                        <td>X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral;">Y</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen; text-align: center;">0.6367</td>
+                        <td style="background-color: palegreen; text-align: center;">1.0000</td>
                     </tr>
                     <tr>
-                        <td>G61-61406-DPL-D10-20638  	</td>
+                        <td>G61-61406-DPL-D10-20638</td>
                         <td>G61-61406-DPL-D10-20638	</td>
                         <td>G61-61406-RAT-D5F0-20638</td>
-                        <td style="background-color: lightcoral;">0.0039</td>
+                        <td>X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: palegreen;">X</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0039</td>
+                        <td style="background-color: lightcoral; text-align: center;">0.0078</td>
                     </tr>
                 </tbody>
             </table>
